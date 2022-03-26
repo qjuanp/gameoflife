@@ -62,3 +62,7 @@ func toCharacter(bit uint8) string {
 func toInt(bit uint8) string {
 	return fmt.Sprintf("%d", bit)
 }
+
+func nextBoardState(currentBoard [][]uint8) [][]uint8 {
+	return currentBoard
+}

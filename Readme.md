@@ -1,14 +1,26 @@
-# Run
+# Game of life
+
+## Rules
+
+- Underpopulation: An alive cell with 0-1 live neighbors will die
+- Right conditions: An alive cell with 2-3 live neighbors will be kept alive
+- Overpopulation: An alive cell with more than 3 live neighbots will die
+- Regeneration: A dead cell with exactly 3 live neighbors will live
+
+# App
+## Run
 
 Run the game of life directly with go
 
 `go run main.go`
 
-# Run tests
+## Tests
 
 Execute all the test cases
 
 `go test`
+
+
 
 # References
 
