@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
 func main() {
 	fmt.Println("Project setup done")
 	board := ramdomInitialization(5, 5, time.Now().UnixNano())
-	printBoard(board)
+	fmt.Print(boardToString(board))
 }
 
 const ALIVE uint8 = 1
@@ -37,13 +38,16 @@ func ramdomInitialization(rows uint32, columns uint32, seed int64) [][]uint8 {
 	return board
 }
 
-func printBoard(board [][]uint8) {
+func boardToString(board [][]uint8) string {
+	boardStringBuilder := strings.Builder{}
 	for _, row := range board {
 		for _, cell := range row {
-			fmt.Printf("%s", toCharacter(cell))
+			boardStringBuilder.WriteString(fmt.Sprintf("%s", toCharacter(cell)))
 		}
-		fmt.Println()
+		boardStringBuilder.WriteString(fmt.Sprintln())
 	}
+
+	return boardStringBuilder.String()
 }
 
 func toCharacter(bit uint8) string {
