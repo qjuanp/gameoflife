@@ -212,3 +212,24 @@ func TestDeadCellsWithExcatly3NeighborsShouldComeAlive(t *testing.T) {
 		detailedErrorResult(t, resultNextGenerationBoard, expectedNextGenerationBoard)
 	}
 }
+
+func TestDeadCellsWithExcatly1NeighborShouldBeDead(t *testing.T) {
+	currentBoard := [][]uint8{
+		{0, 0, 0},
+		{1, 1, 1},
+		{0, 0, 0},
+	}
+
+	expectedNextGenerationBoard := [][]uint8{
+		{0, 1, 0},
+		{0, 1, 0},
+		{0, 1, 0},
+	}
+
+	resultNextGenerationBoard := nextBoardState(currentBoard)
+
+	if !reflect.DeepEqual(resultNextGenerationBoard, expectedNextGenerationBoard) {
+		t.Errorf("Rule error: Dead cells with no neighbors")
+		detailedErrorResult(t, resultNextGenerationBoard, expectedNextGenerationBoard)
+	}
+}
