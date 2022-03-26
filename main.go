@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
-	"time"
 )
 
 func main() {
 	fmt.Println("Project setup done")
-	board := ramdomInitialization(5, 5, time.Now().UnixNano())
-	fmt.Print(boardToString(board))
+	board := ramdomInitialization(5, 5, 1)
+	fmt.Print(boardToString(board, toInt))
 }
+
+type serializer func(uint8) string
 
 const ALIVE uint8 = 1
 const ALIVE_CHARACTER string = "\u2588"
@@ -38,11 +39,11 @@ func ramdomInitialization(rows uint32, columns uint32, seed int64) [][]uint8 {
 	return board
 }
 
-func boardToString(board [][]uint8) string {
+func boardToString(board [][]uint8, serialize serializer) string {
 	boardStringBuilder := strings.Builder{}
 	for _, row := range board {
 		for _, cell := range row {
-			boardStringBuilder.WriteString(fmt.Sprintf("%s", toCharacter(cell)))
+			boardStringBuilder.WriteString(fmt.Sprintf("%s", serialize(cell)))
 		}
 		boardStringBuilder.WriteString(fmt.Sprintln())
 	}
@@ -56,4 +57,8 @@ func toCharacter(bit uint8) string {
 	} else {
 		return DEAD_CHARACTER
 	}
+}
+
+func toInt(bit uint8) string {
+	return fmt.Sprintf("%d", bit)
 }

@@ -2,17 +2,16 @@ package main
 
 import (
 	"testing"
-	"time"
 )
 
-func TestRandomInitializing(t *testing.T) {
+func TestRandomInitializationSize(t *testing.T) {
 	const columnsExpected uint32 = 5
 	const rowsExpected uint32 = 5
-	seed := time.Now().UnixNano()
+	seed := int64(1)
 
-	initializedBoard := ramdomInitialization(rowsExpected, columnsExpected, seed)
-	rowsResult := uint32(len(initializedBoard))
-	columnsResult := uint32(len(initializedBoard[0]))
+	boardResult := ramdomInitialization(rowsExpected, columnsExpected, seed)
+	rowsResult := uint32(len(boardResult))
+	columnsResult := uint32(len(boardResult[0]))
 
 	if rowsResult != rowsExpected {
 		t.Errorf("Rows: %d, wanted %d", rowsResult, rowsExpected)
@@ -20,5 +19,30 @@ func TestRandomInitializing(t *testing.T) {
 
 	if columnsResult != columnsExpected {
 		t.Errorf("Columns: %d, wanted %d", columnsResult, columnsExpected)
+	}
+}
+
+func TestRandomInitializationBoard(t *testing.T) {
+	const (
+		columnsExpected uint32 = 5
+		rowsExpected    uint32 = 5
+	)
+	seed := int64(1)
+	boardExpected := [][]uint8{
+		{1, 1, 1, 0, 0},
+		{1, 0, 0, 0, 0},
+		{1, 1, 0, 0, 0},
+		{0, 0, 0, 1, 0},
+		{0, 0, 1, 1, 0},
+	}
+
+	boardResult := ramdomInitialization(rowsExpected, columnsExpected, seed)
+
+	for rowIndex, row := range boardResult {
+		for columnIndex, cell := range row {
+			if cell != boardExpected[rowIndex][columnIndex] {
+				t.Errorf("At(row=%d,column%d) Value=%d | Expected=%d", rowIndex, columnIndex, cell, boardExpected[rowIndex][columnIndex])
+			}
+		}
 	}
 }
