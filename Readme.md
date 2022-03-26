@@ -20,7 +20,11 @@ Execute all the test cases
 
 `go test`
 
+# Remaining tasks
 
+- [ ] run it forever and update results in console
+- [ ] connect edges so every cell will have 8 neighbors
+- [ ] refactor
 
 # References
 
