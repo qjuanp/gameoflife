@@ -4,12 +4,22 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
+	"time"
+
+	"github.com/inancgumus/screen"
 )
 
 func main() {
 	fmt.Println("Project setup done")
-	board := ramdomInitialization(5, 5, 1)
-	fmt.Print(boardToString(board, toInt))
+	currentBoard := ramdomInitialization(100, 100, 1)
+
+	screen.Clear()
+	for {
+		screen.MoveTopLeft()
+		fmt.Print(boardToString(currentBoard, toCharacter))
+		time.Sleep(time.Second)
+		currentBoard = nextBoardState(currentBoard)
+	}
 }
 
 type serializer func(uint8) string
