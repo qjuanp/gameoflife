@@ -3,23 +3,28 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
+	"os/exec"
 	"strings"
 	"time"
-
-	"github.com/inancgumus/screen"
 )
 
 func main() {
 	fmt.Println("Project setup done")
 	currentBoard := ramdomInitialization(100, 100, 1)
 
-	screen.Clear()
+	clear()
 	for {
-		screen.MoveTopLeft()
 		fmt.Print(boardToString(currentBoard, toCharacter))
 		time.Sleep(time.Second)
 		currentBoard = nextBoardState(currentBoard)
 	}
+}
+
+func clear() {
+	c := exec.Command("clear")
+	c.Stdout = os.Stdout
+	c.Run()
 }
 
 type serializer func(uint8) string
@@ -42,12 +47,13 @@ func createBoard(rows int, columns int) [][]uint8 {
 
 func ramdomInitialization(rows uint32, columns uint32, seed int64) [][]uint8 {
 	var board [][]uint8 = make([][]uint8, rows)
-	rand.Seed(seed)
+
+	random := rand.New(rand.NewSource(seed))
 
 	for row := range board {
 		board[row] = make([]uint8, columns)
 		for column := range board[row] {
-			randomValue := rand.Float64()
+			randomValue := random.Float64()
 			if randomValue >= 0.5 {
 				board[row][column] = ALIVE
 			} else {
