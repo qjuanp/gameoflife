@@ -3,23 +3,28 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
+	"os/exec"
 	"strings"
 	"time"
-
-	"github.com/inancgumus/screen"
 )
 
 func main() {
 	fmt.Println("Project setup done")
 	currentBoard := ramdomInitialization(100, 100, 1)
 
-	screen.Clear()
+	clear()
 	for {
-		screen.MoveTopLeft()
 		fmt.Print(boardToString(currentBoard, toCharacter))
 		time.Sleep(time.Second)
 		currentBoard = nextBoardState(currentBoard)
 	}
+}
+
+func clear() {
+	c := exec.Command("clear")
+	c.Stdout = os.Stdout
+	c.Run()
 }
 
 type serializer func(uint8) string
