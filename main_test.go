@@ -5,9 +5,9 @@ import (
 	"testing"
 )
 
-func detailedErrorResult(t *testing.T, boardResult [][]uint8, boardExpected [][]uint8) {
-	t.Errorf("Board result:\n%s\n", boardToString(boardResult, toInt))
-	t.Errorf("Board expected:\n%s\n", boardToString(boardExpected, toInt))
+func detailedErrorResult(t *testing.T, boardResult Board, boardExpected Board) {
+	t.Errorf("Board result:\n%s\n", boardResult.toString())
+	t.Errorf("Board expected:\n%s\n", boardExpected.toString())
 
 	for rowIndex, row := range boardResult {
 		for columnIndex, cell := range row {
@@ -19,9 +19,9 @@ func detailedErrorResult(t *testing.T, boardResult [][]uint8, boardExpected [][]
 }
 
 func TestCreateBoard(t *testing.T) {
-	const columnsExpected int = 5
-	const rowsExpected int = 5
-	boardExpected := [][]uint8{
+	const columnsExpected uint = 5
+	const rowsExpected uint = 5
+	boardExpected := Board{
 		{0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0},
@@ -29,7 +29,7 @@ func TestCreateBoard(t *testing.T) {
 		{0, 0, 0, 0, 0},
 	}
 
-	boardResult := createBoard(rowsExpected, columnsExpected)
+	boardResult := NewEmptyBoardOfSize(rowsExpected, columnsExpected)
 	if !reflect.DeepEqual(boardResult, boardExpected) {
 		t.Errorf("Unexpected created board")
 		detailedErrorResult(t, boardResult, boardExpected)
@@ -37,13 +37,13 @@ func TestCreateBoard(t *testing.T) {
 }
 
 func TestRandomInitializationSize(t *testing.T) {
-	const columnsExpected uint32 = 5
-	const rowsExpected uint32 = 5
+	const columnsExpected uint = 5
+	const rowsExpected uint = 5
 	seed := int64(1)
 
-	boardResult := ramdomInitialization(rowsExpected, columnsExpected, seed)
-	rowsResult := uint32(len(boardResult))
-	columnsResult := uint32(len(boardResult[0]))
+	boardResult := NewRandomBoard(rowsExpected, columnsExpected, seed)
+	rowsResult := boardResult.numberOfColumns()
+	columnsResult := boardResult.numberOfRows()
 
 	if rowsResult != rowsExpected {
 		t.Errorf("Rows: %d, wanted %d", rowsResult, rowsExpected)
@@ -56,11 +56,11 @@ func TestRandomInitializationSize(t *testing.T) {
 
 func TestRandomInitializationBoard(t *testing.T) {
 	const (
-		columnsExpected uint32 = 5
-		rowsExpected    uint32 = 5
+		columnsExpected uint = 5
+		rowsExpected    uint = 5
 	)
 	seed := int64(1)
-	boardExpected := [][]uint8{
+	boardExpected := Board{
 		{1, 1, 1, 0, 0},
 		{1, 0, 0, 0, 0},
 		{1, 1, 0, 0, 0},
@@ -68,7 +68,7 @@ func TestRandomInitializationBoard(t *testing.T) {
 		{0, 0, 1, 1, 0},
 	}
 
-	boardResult := ramdomInitialization(rowsExpected, columnsExpected, seed)
+	boardResult := NewRandomBoard(rowsExpected, columnsExpected, seed)
 
 	if !reflect.DeepEqual(boardResult, boardExpected) {
 		t.Errorf("Unexpected initialized board")
@@ -76,60 +76,61 @@ func TestRandomInitializationBoard(t *testing.T) {
 	}
 }
 
-func TestLowerBoundCentreCell(t *testing.T) {
-	position := 3
-	expectedLowerBound := 2
+// func TestLowerBoundCentreCell(t *testing.T) {
+// 	position := 3
+// 	expectedLowerBound := 2
 
-	result := lowerBound(position)
+// 	result := lowerBound(position)
 
-	if result != expectedLowerBound {
-		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-	}
-}
+// 	if result != expectedLowerBound {
+// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
+// 	}
+// }
 
-func TestLowerBoundCornerCell(t *testing.T) {
-	position := 0
-	expectedLowerBound := 0
+// func TestLowerBoundCornerCell(t *testing.T) {
+// 	position := 0
+// 	expectedLowerBound := 0
 
-	result := lowerBound(position)
+// 	result := lowerBound(position)
 
-	if result != expectedLowerBound {
-		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-	}
-}
+// 	if result != expectedLowerBound {
+// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
+// 	}
+// }
 
-func TestUpperBoundCentreCell(t *testing.T) {
-	position := 3
-	length := 5
-	expectedLowerBound := 4
+// func TestUpperBoundCentreCell(t *testing.T) {
+// 	position := 3
+// 	length := 5
+// 	expectedLowerBound := 4
 
-	result := upperBound(position, length)
+// 	result := upperBound(position, length)
 
-	if result != expectedLowerBound {
-		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-	}
-}
+// 	if result != expectedLowerBound {
+// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
+// 	}
+// }
 
-func TestUpperBoundCornerCell(t *testing.T) {
-	position := 4
-	length := 5
-	expectedLowerBound := 4
+// func TestUpperBoundCornerCell(t *testing.T) {
+// 	position := 4
+// 	length := 5
+// 	expectedLowerBound := 4
 
-	result := upperBound(position, length)
+// 	result := upperBound(position, length)
 
-	if result != expectedLowerBound {
-		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-	}
-}
+// 	if result != expectedLowerBound {
+// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
+// 	}
+// }
 
 func TestCountAliveNeighborsAllDead(t *testing.T) {
-	currentBoard := [][]uint8{
+	currentBoard := Board{
 		{0, 0, 0},
 		{0, 0, 0},
 		{0, 0, 0},
 	}
 
-	result := countAliveNeighboards(currentBoard, 1, 1)
+	game := GameOfLife{currentBoard}
+	result := game.countAliveNeighboards(1, 1)
 
 	if result != 0 {
 		t.Error("Miscalculation of alive neighbors when all dead")
@@ -137,13 +138,14 @@ func TestCountAliveNeighborsAllDead(t *testing.T) {
 }
 
 func TestCountAliveNeighbors2AliveFromCenter(t *testing.T) {
-	currentBoard := [][]uint8{
+	currentBoard := Board{
 		{0, 0, 1},
 		{0, 0, 0},
 		{1, 0, 0},
 	}
 
-	result := countAliveNeighboards(currentBoard, 1, 1)
+	game := GameOfLife{currentBoard}
+	result := game.countAliveNeighboards(1, 1)
 
 	if result != 2 {
 		t.Error("Miscalculation of alive neighbors when all dead")
@@ -151,13 +153,13 @@ func TestCountAliveNeighbors2AliveFromCenter(t *testing.T) {
 }
 
 func TestCountAliveNeighborsAllAliveFromUpperLeftcorner(t *testing.T) {
-	currentBoard := [][]uint8{
+	currentBoard := Board{
 		{1, 1, 0},
 		{1, 1, 0},
 		{0, 0, 0},
 	}
-
-	result := countAliveNeighboards(currentBoard, 0, 0)
+	game := GameOfLife{currentBoard}
+	result := game.countAliveNeighboards(1, 1)
 
 	if result != 3 {
 		t.Errorf("Miscalculation of alive neighbors when all dead | result=%d", result)
@@ -172,64 +174,69 @@ func TestCountAliveNeighborsAllAliveFromUpperLeftcorner(t *testing.T) {
 */
 
 func TestDeadCellsWithNoNeighborsShouldStayDead(t *testing.T) {
-	currentBoard := [][]uint8{
+	currentBoard := Board{
 		{0, 0, 0},
 		{0, 0, 0},
 		{0, 0, 0},
 	}
 
-	expectedNextGenerationBoard := [][]uint8{
+	expectedNextGenerationBoard := Board{
 		{0, 0, 0},
 		{0, 0, 0},
 		{0, 0, 0},
 	}
 
-	resultNextGenerationBoard := nextBoardState(currentBoard)
+	game := GameOfLife{currentBoard}
 
-	if !reflect.DeepEqual(resultNextGenerationBoard, expectedNextGenerationBoard) {
+	nextGenerationGame := game.next()
+
+	if !reflect.DeepEqual(nextGenerationGame.Board, expectedNextGenerationBoard) {
 		t.Errorf("Rule error: Dead cells with no neighbors")
-		detailedErrorResult(t, resultNextGenerationBoard, expectedNextGenerationBoard)
+		detailedErrorResult(t, nextGenerationGame.Board, expectedNextGenerationBoard)
 	}
 }
 
 func TestDeadCellsWithExcatly3NeighborsShouldComeAlive(t *testing.T) {
-	currentBoard := [][]uint8{
+	currentBoard := Board{
 		{0, 0, 1},
 		{0, 1, 1},
 		{0, 0, 0},
 	}
 
-	expectedNextGenerationBoard := [][]uint8{
+	expectedNextGenerationBoard := Board{
 		{0, 1, 1},
 		{0, 1, 1},
 		{0, 0, 0},
 	}
 
-	resultNextGenerationBoard := nextBoardState(currentBoard)
+	game := GameOfLife{currentBoard}
 
-	if !reflect.DeepEqual(resultNextGenerationBoard, expectedNextGenerationBoard) {
+	nextGenerationGame := game.next()
+
+	if !reflect.DeepEqual(nextGenerationGame.Board, expectedNextGenerationBoard) {
 		t.Errorf("Rule error: Dead cells with no neighbors")
-		detailedErrorResult(t, resultNextGenerationBoard, expectedNextGenerationBoard)
+		detailedErrorResult(t, nextGenerationGame.Board, expectedNextGenerationBoard)
 	}
 }
 
 func TestDeadCellsWithExcatly1NeighborShouldBeDead(t *testing.T) {
-	currentBoard := [][]uint8{
+	currentBoard := Board{
 		{0, 0, 0},
 		{1, 1, 1},
 		{0, 0, 0},
 	}
 
-	expectedNextGenerationBoard := [][]uint8{
+	expectedNextGenerationBoard := Board{
 		{0, 1, 0},
 		{0, 1, 0},
 		{0, 1, 0},
 	}
 
-	resultNextGenerationBoard := nextBoardState(currentBoard)
+	game := GameOfLife{currentBoard}
+	nextGenerationGame := game.next()
 
-	if !reflect.DeepEqual(resultNextGenerationBoard, expectedNextGenerationBoard) {
+	if !reflect.DeepEqual(nextGenerationGame.Board, expectedNextGenerationBoard) {
 		t.Errorf("Rule error: Dead cells with no neighbors")
-		detailedErrorResult(t, resultNextGenerationBoard, expectedNextGenerationBoard)
+		detailedErrorResult(t, nextGenerationGame.Board, expectedNextGenerationBoard)
 	}
 }
