@@ -22,9 +22,25 @@ Execute all the test cases
 
 # Remaining tasks
 
-- [ ] run it forever and update results in console
-- [ ] connect edges so every cell will have 8 neighbors
+- [X] run it forever and update results in console
+- [ ] Review pending features from the origianl documentation
 - [ ] refactor
+    - [ ] Modularize the code (Board Functionality != Game of Life Rules) 
+        - Is there a generic implementation to inject the Cell
+        - How to restrict the types to be initialized just with specific functions
+        - How to package the code?
+- [ ] Board: connect edges so every cell will have 8 neighbors
+- [ ] Refactor 2:
+    - [ ] Memory Optimization? 
+        - Less memory consumption vs Inmutability
+    - [ ] Process optimization
+        - What if the cell can reffer its neighboards to determine its next state? New Matrix Structure
+- [ ] Create CLI tool
+- [ ] CLI Visor (part with the cell, part with changes)
+- [ ] Read the initial state from a file (CLI)
+- [ ] Create Docker file
+- [ ] Create WebHook
+- [ ] Create Ract Webhook component
 
 # References
 
