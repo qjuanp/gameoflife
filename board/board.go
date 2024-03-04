@@ -1,4 +1,4 @@
-package main
+package board
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ func NewEmptyBoardOfSize(rows uint, columns uint) Board {
 }
 
 func NewEmptyBoardAsBigAs(board *Board) Board {
-	return NewEmptyBoardOfSize(board.numberOfRows(), board.numberOfColumns())
+	return NewEmptyBoardOfSize(board.NumberOfRows(), board.NumberOfColumns())
 }
 
 func NewRandomBoard(rows uint, columns uint, seed int64) Board {
@@ -42,7 +42,7 @@ func NewRandomBoard(rows uint, columns uint, seed int64) Board {
 	return newBoard
 }
 
-func (board *Board) toString() string {
+func (board *Board) ToString() string {
 	strBuilder := strings.Builder{}
 	for _, row := range *board {
 		for _, cell := range row {
@@ -54,15 +54,15 @@ func (board *Board) toString() string {
 	return strBuilder.String()
 }
 
-func (board *Board) numberOfRows() uint {
+func (board *Board) NumberOfRows() uint {
 	return uint(len(*board))
 }
 
-func (board *Board) numberOfColumns() uint {
+func (board *Board) NumberOfColumns() uint {
 	return uint(len((*board)[0]))
 }
 
-func (board *Board) lowerBound(index int) int {
+func (board *Board) LowerBound(index int) int {
 	if index == 0 {
 		return 0
 	} else {
@@ -70,7 +70,7 @@ func (board *Board) lowerBound(index int) int {
 	}
 }
 
-func (board *Board) upperBound(index int, maxLength uint) int {
+func (board *Board) UpperBound(index int, maxLength uint) int {
 	if index >= int(maxLength-1) {
 		return index
 	} else {

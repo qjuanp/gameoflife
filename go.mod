@@ -1,3 +1,3 @@
-module https://github.com/qjuanp/gameoflife
+module github.com/qjuanp/gameoflife
 
 go 1.18

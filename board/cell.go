@@ -1,12 +1,12 @@
-package main
+package board
 
 const ALIVE_CHARACTER string = "\u2588"
 const DEAD_CHARACTER string = "\u0020"
 
-type Cell uint8
+type Cell bool
 
-const ALIVE Cell = Cell(1)
-const DEAD Cell = Cell(0)
+const ALIVE Cell = Cell(true)
+const DEAD Cell = Cell(false)
 
 func (cell Cell) toCharacter() string {
 	if cell == ALIVE {
@@ -16,7 +16,7 @@ func (cell Cell) toCharacter() string {
 	}
 }
 
-func (cell Cell) newCellState(quantityOfAliveNeighbors uint8) Cell {
+func (cell Cell) NewCellState(quantityOfAliveNeighbors uint8) Cell {
 	// Overpopulation
 	if quantityOfAliveNeighbors > 3 {
 		return DEAD

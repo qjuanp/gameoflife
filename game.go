@@ -1,20 +1,22 @@
 package main
 
+import "github.com/qjuanp/gameoflife/board"
+
 type GameOfLife struct {
-	Board
+	board.Board
 }
 
 func NewGameOfSize(rows uint, columns uint) GameOfLife {
-	return GameOfLife{NewRandomBoard(rows, columns, 1)}
+	return GameOfLife{board.NewRandomBoard(rows, columns, 1)}
 }
 
 func (game *GameOfLife) next() GameOfLife {
-	newBoardState := NewEmptyBoardAsBigAs(&game.Board)
+	newBoardState := board.NewEmptyBoardAsBigAs(&game.Board)
 
 	for rowIndex, row := range game.Board {
 		for columnIndex, cell := range row {
 			aliveNeighbors := game.countAliveNeighboards(rowIndex, columnIndex)
-			newBoardState[rowIndex][columnIndex] = cell.newCellState(aliveNeighbors)
+			newBoardState[rowIndex][columnIndex] = cell.NewCellState(aliveNeighbors)
 		}
 	}
 
@@ -24,11 +26,11 @@ func (game *GameOfLife) next() GameOfLife {
 func (game *GameOfLife) countAliveNeighboards(row int, column int) uint8 {
 	aliveNeighbors := 0
 
-	for r := game.lowerBound(row); r <= game.upperBound(row, game.numberOfRows()); r++ {
-		for c := game.lowerBound(column); c <= game.upperBound(column, game.numberOfColumns()); c++ {
+	for r := game.LowerBound(row); r <= game.UpperBound(row, game.NumberOfRows()); r++ {
+		for c := game.LowerBound(column); c <= game.UpperBound(column, game.NumberOfColumns()); c++ {
 			// fmt.Printf("on(%d,%d)=%d", r, c, currentBoard[r][c])
 			// fmt.Println()
-			if (r != row || c != column) && game.Board[r][c] == ALIVE {
+			if (r != row || c != column) && game.Board[r][c] == board.ALIVE {
 				// fmt.Printf("Counted on(%d,%d)=%d", r, c, currentBoard[r][c])
 				// fmt.Println()
 				aliveNeighbors++
