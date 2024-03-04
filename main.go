@@ -13,7 +13,7 @@ func main() {
 
 	clear()
 	for {
-		fmt.Print(game.toString())
+		fmt.Print(game.ToString())
 		time.Sleep(time.Second)
 		game = game.next()
 	}

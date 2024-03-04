@@ -3,16 +3,18 @@ package main
 import (
 	"reflect"
 	"testing"
+
+	"github.com/qjuanp/gameoflife/board"
 )
 
-func detailedErrorResult(t *testing.T, boardResult Board, boardExpected Board) {
-	t.Errorf("Board result:\n%s\n", boardResult.toString())
-	t.Errorf("Board expected:\n%s\n", boardExpected.toString())
+func detailedErrorResult(t *testing.T, boardResult board.Board, boardExpected board.Board) {
+	t.Errorf("Board result:\n%s\n", boardResult.ToString())
+	t.Errorf("Board expected:\n%s\n", boardExpected.ToString())
 
 	for rowIndex, row := range boardResult {
 		for columnIndex, cell := range row {
 			if cell != boardExpected[rowIndex][columnIndex] {
-				t.Errorf("At(row=%d,column%d) Value=%d | Expected=%d", rowIndex, columnIndex, cell, boardExpected[rowIndex][columnIndex])
+				t.Errorf("At(row=%d,column%d) Value=%t | Expected=%t", rowIndex, columnIndex, cell, boardExpected[rowIndex][columnIndex])
 			}
 		}
 	}
@@ -21,15 +23,15 @@ func detailedErrorResult(t *testing.T, boardResult Board, boardExpected Board) {
 func TestCreateBoard(t *testing.T) {
 	const columnsExpected uint = 5
 	const rowsExpected uint = 5
-	boardExpected := Board{
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0},
+	boardExpected := board.Board{
+		{board.DEAD, board.DEAD, board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD, board.DEAD, board.DEAD},
 	}
 
-	boardResult := NewEmptyBoardOfSize(rowsExpected, columnsExpected)
+	boardResult := board.NewEmptyBoardOfSize(rowsExpected, columnsExpected)
 	if !reflect.DeepEqual(boardResult, boardExpected) {
 		t.Errorf("Unexpected created board")
 		detailedErrorResult(t, boardResult, boardExpected)
@@ -41,9 +43,9 @@ func TestRandomInitializationSize(t *testing.T) {
 	const rowsExpected uint = 5
 	seed := int64(1)
 
-	boardResult := NewRandomBoard(rowsExpected, columnsExpected, seed)
-	rowsResult := boardResult.numberOfColumns()
-	columnsResult := boardResult.numberOfRows()
+	boardResult := board.NewRandomBoard(rowsExpected, columnsExpected, seed)
+	rowsResult := boardResult.NumberOfColumns()
+	columnsResult := boardResult.NumberOfRows()
 
 	if rowsResult != rowsExpected {
 		t.Errorf("Rows: %d, wanted %d", rowsResult, rowsExpected)
@@ -60,15 +62,15 @@ func TestRandomInitializationBoard(t *testing.T) {
 		rowsExpected    uint = 5
 	)
 	seed := int64(1)
-	boardExpected := Board{
-		{1, 1, 1, 0, 0},
-		{1, 0, 0, 0, 0},
-		{1, 1, 0, 0, 0},
-		{0, 0, 0, 1, 0},
-		{0, 0, 1, 1, 0},
+	boardExpected := board.Board{
+		{board.ALIVE, board.ALIVE, board.ALIVE, board.DEAD, board.DEAD},
+		{board.ALIVE, board.DEAD, board.DEAD, board.DEAD, board.DEAD},
+		{board.ALIVE, board.ALIVE, board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD, board.ALIVE, board.DEAD},
+		{board.DEAD, board.DEAD, board.ALIVE, board.ALIVE, board.DEAD},
 	}
 
-	boardResult := NewRandomBoard(rowsExpected, columnsExpected, seed)
+	boardResult := board.NewRandomBoard(rowsExpected, columnsExpected, seed)
 
 	if !reflect.DeepEqual(boardResult, boardExpected) {
 		t.Errorf("Unexpected initialized board")
@@ -88,8 +90,8 @@ func TestRandomInitializationBoard(t *testing.T) {
 // }
 
 // func TestLowerBoundCornerCell(t *testing.T) {
-// 	position := 0
-// 	expectedLowerBound := 0
+// 	position := board.DEAD
+// 	expectedLowerBound := board.DEAD
 
 // 	result := lowerBound(position)
 
@@ -123,10 +125,10 @@ func TestRandomInitializationBoard(t *testing.T) {
 // }
 
 func TestCountAliveNeighborsAllDead(t *testing.T) {
-	currentBoard := Board{
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
+	currentBoard := board.Board{
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 
 	game := GameOfLife{currentBoard}
@@ -138,10 +140,10 @@ func TestCountAliveNeighborsAllDead(t *testing.T) {
 }
 
 func TestCountAliveNeighbors2AliveFromCenter(t *testing.T) {
-	currentBoard := Board{
-		{0, 0, 1},
-		{0, 0, 0},
-		{1, 0, 0},
+	currentBoard := board.Board{
+		{board.DEAD, board.DEAD, board.ALIVE},
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.ALIVE, board.DEAD, board.DEAD},
 	}
 
 	game := GameOfLife{currentBoard}
@@ -153,10 +155,10 @@ func TestCountAliveNeighbors2AliveFromCenter(t *testing.T) {
 }
 
 func TestCountAliveNeighborsAllAliveFromUpperLeftcorner(t *testing.T) {
-	currentBoard := Board{
-		{1, 1, 0},
-		{1, 1, 0},
-		{0, 0, 0},
+	currentBoard := board.Board{
+		{board.ALIVE, board.ALIVE, board.DEAD},
+		{board.ALIVE, board.ALIVE, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 	game := GameOfLife{currentBoard}
 	result := game.countAliveNeighboards(1, 1)
@@ -174,16 +176,16 @@ func TestCountAliveNeighborsAllAliveFromUpperLeftcorner(t *testing.T) {
 */
 
 func TestDeadCellsWithNoNeighborsShouldStayDead(t *testing.T) {
-	currentBoard := Board{
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
+	currentBoard := board.Board{
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 
-	expectedNextGenerationBoard := Board{
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0},
+	expectedNextGenerationBoard := board.Board{
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 
 	game := GameOfLife{currentBoard}
@@ -197,16 +199,16 @@ func TestDeadCellsWithNoNeighborsShouldStayDead(t *testing.T) {
 }
 
 func TestDeadCellsWithExcatly3NeighborsShouldComeAlive(t *testing.T) {
-	currentBoard := Board{
-		{0, 0, 1},
-		{0, 1, 1},
-		{0, 0, 0},
+	currentBoard := board.Board{
+		{board.DEAD, board.DEAD, board.ALIVE},
+		{board.DEAD, board.ALIVE, board.ALIVE},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 
-	expectedNextGenerationBoard := Board{
-		{0, 1, 1},
-		{0, 1, 1},
-		{0, 0, 0},
+	expectedNextGenerationBoard := board.Board{
+		{board.DEAD, board.ALIVE, board.ALIVE},
+		{board.DEAD, board.ALIVE, board.ALIVE},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 
 	game := GameOfLife{currentBoard}
@@ -219,17 +221,17 @@ func TestDeadCellsWithExcatly3NeighborsShouldComeAlive(t *testing.T) {
 	}
 }
 
-func TestDeadCellsWithExcatly1NeighborShouldBeDead(t *testing.T) {
-	currentBoard := Board{
-		{0, 0, 0},
-		{1, 1, 1},
-		{0, 0, 0},
+func TestDeadCellsWithExcatlyAliveNeighborShouldBeDead(t *testing.T) {
+	currentBoard := board.Board{
+		{board.DEAD, board.DEAD, board.DEAD},
+		{board.ALIVE, board.ALIVE, board.ALIVE},
+		{board.DEAD, board.DEAD, board.DEAD},
 	}
 
-	expectedNextGenerationBoard := Board{
-		{0, 1, 0},
-		{0, 1, 0},
-		{0, 1, 0},
+	expectedNextGenerationBoard := board.Board{
+		{board.DEAD, board.ALIVE, board.DEAD},
+		{board.DEAD, board.ALIVE, board.DEAD},
+		{board.DEAD, board.ALIVE, board.DEAD},
 	}
 
 	game := GameOfLife{currentBoard}
