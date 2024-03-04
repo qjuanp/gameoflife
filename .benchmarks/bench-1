@@ -1,0 +1,23 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/qjuanp/gameoflife
+BenchmarkIntialization/Intialization_size=1000-8         	     110	  10288120 ns/op	 1053954 B/op	    1002 allocs/op
+BenchmarkIntialization/Intialization_size=2000-8         	      28	  41081750 ns/op	 4150545 B/op	    2002 allocs/op
+BenchmarkIntialization/Intialization_size=3000-8         	      12	  92562451 ns/op	 9295136 B/op	    3002 allocs/op
+BenchmarkIntialization/Intialization_size=4000-8         	       7	 164714899 ns/op	16487707 B/op	    4002 allocs/op
+BenchmarkIntialization/Intialization_size=5000-8         	       4	 256886354 ns/op	27008304 B/op	    5002 allocs/op
+BenchmarkIntialization/Intialization_size=6000-8         	       3	 369568833 ns/op	37016864 B/op	    6002 allocs/op
+BenchmarkIntialization/Intialization_size=7000-8         	       2	 505738229 ns/op	57521456 B/op	    7002 allocs/op
+BenchmarkIntialization/Intialization_size=8000-8         	       2	 660145271 ns/op	65737984 B/op	    8002 allocs/op
+BenchmarkIntialization/Intialization_size=9000-8         	       2	 831021688 ns/op	85474560 B/op	    9002 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=1000-8         	      26	  44181394 ns/op	 1089120 B/op	    1039 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=2000-8         	       6	 181985493 ns/op	 4836922 B/op	    2334 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=3000-8         	       3	 424811528 ns/op	12388128 B/op	    4002 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=4000-8         	       2	 783732834 ns/op	24726192 B/op	    6002 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=5000-8         	       1	1352611875 ns/op	54011232 B/op	   10004 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=6000-8         	       1	1945278167 ns/op	74028288 B/op	   12003 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=7000-8         	       1	2655171708 ns/op	115037632 B/op	   14005 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=8000-8         	       1	3466853042 ns/op	131470592 B/op	   16003 allocs/op
+BenchmarkNextStateCalculation/Next_Move_on_board_of_size_size=9000-8         	       1	4382448792 ns/op	170943744 B/op	   18003 allocs/op
+PASS
+ok  	github.com/qjuanp/gameoflife	38.974s
