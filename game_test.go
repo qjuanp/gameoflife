@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -136,5 +137,28 @@ func TestDeadCellsWithExcatlyAliveNeighborShouldBeDead(t *testing.T) {
 	if !reflect.DeepEqual(nextGenerationGame.Board, expectedNextGenerationBoard) {
 		t.Errorf("Rule error: Dead cells with no neighbors")
 		detailedErrorResult(t, nextGenerationGame.Board, expectedNextGenerationBoard)
+	}
+}
+
+func BenchmarkIntialization(b *testing.B) {
+	for i := 1; i < 10; i++ {
+		boardSize := uint(i * 1000)
+		b.Run(fmt.Sprintf("Intialization size=%d", boardSize), func(b *testing.B) {
+			for j := 0; j < b.N; j++ {
+				NewGameOfSize(boardSize, boardSize)
+			}
+		})
+	}
+}
+
+func BenchmarkNextStateCalculation(b *testing.B) {
+	for i := 1; i < 10; i++ {
+		boardSize := uint(i * 1000)
+		b.Run(fmt.Sprintf("Next Move on board of size size=%d", boardSize), func(b *testing.B) {
+			game := NewGameOfSize(boardSize, boardSize)
+			for j := 0; j < b.N; j++ {
+				game.next()
+			}
+		})
 	}
 }
