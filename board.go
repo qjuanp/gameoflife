@@ -62,10 +62,6 @@ func (board *Board) numberOfColumns() uint {
 	return uint(len((*board)[0]))
 }
 
-func (board *Board) neighbours(row int, column int) CellNeighbourhood {
-	return CellNeighbourhood{}
-}
-
 func (board *Board) lowerBound(index int) int {
 	if index == 0 {
 		return 0
