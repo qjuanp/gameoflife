@@ -42,8 +42,8 @@ func TestRandomInitializationSize(t *testing.T) {
 	seed := int64(1)
 
 	boardResult := NewRandomBoard(rowsExpected, columnsExpected, seed)
-	rowsResult := boardResult.NumberOfColumns()
-	columnsResult := boardResult.NumberOfRows()
+	rowsResult := boardResult.CountColumns()
+	columnsResult := boardResult.CountRows()
 
 	if rowsResult != rowsExpected {
 		t.Errorf("Rows: %d, wanted %d", rowsResult, rowsExpected)
