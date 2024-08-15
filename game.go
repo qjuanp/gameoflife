@@ -27,10 +27,10 @@ func (game *GameOfLife) next() GameOfLife {
 }
 
 func (game *GameOfLife) countAliveNeighboards(row int, column int) uint8 {
-	aliveNeighbors := 0
+	var aliveNeighbors uint8 = 0
 
-	for r := game.LowerBound(row); r <= game.UpperBound(row, game.NumberOfRows()); r++ {
-		for c := game.LowerBound(column); c <= game.UpperBound(column, game.NumberOfColumns()); c++ {
+	for r := game.LowerBound(row); r <= game.RowsUpperBoundFor(row); r++ {
+		for c := game.LowerBound(column); c <= game.ColumnsUpperBoundFor(column); c++ {
 			// fmt.Printf("on(%d,%d)=%d", r, c, currentBoard[r][c])
 			// fmt.Println()
 			if (r != row || c != column) && game.Board[r][c] == ALIVE {
@@ -41,7 +41,7 @@ func (game *GameOfLife) countAliveNeighboards(row int, column int) uint8 {
 		}
 	}
 
-	return uint8(aliveNeighbors)
+	return aliveNeighbors
 }
 
 func newCellState(cell bool, quantityOfAliveNeighbors uint8) bool {
