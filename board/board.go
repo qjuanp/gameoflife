@@ -6,13 +6,13 @@ import (
 	"strings"
 )
 
-type Board [][]Cell
+type Board [][]bool
 
 func NewEmptyBoardOfSize(rows uint, columns uint) Board {
 	var newBoard Board = make(Board, rows)
 
 	for row := range newBoard {
-		newBoard[row] = make([]Cell, columns)
+		newBoard[row] = make([]bool, columns)
 	}
 
 	return newBoard
@@ -28,13 +28,13 @@ func NewRandomBoard(rows uint, columns uint, seed int64) Board {
 	random := rand.New(rand.NewSource(seed))
 
 	for row := range newBoard {
-		newBoard[row] = make([]Cell, columns)
+		newBoard[row] = make([]bool, columns)
 		for column := range newBoard[row] {
 			randomValue := random.Float64()
 			if randomValue >= 0.5 {
-				newBoard[row][column] = ALIVE
+				newBoard[row][column] = true
 			} else {
-				newBoard[row][column] = DEAD
+				newBoard[row][column] = false
 			}
 		}
 	}
@@ -44,9 +44,13 @@ func NewRandomBoard(rows uint, columns uint, seed int64) Board {
 
 func (board *Board) ToString() string {
 	strBuilder := strings.Builder{}
+	character := map[bool]string{
+		true:  "\u2588",
+		false: "\u0020",
+	}
 	for _, row := range *board {
 		for _, cell := range row {
-			strBuilder.WriteString(fmt.Sprintf("%s", cell.toCharacter()))
+			strBuilder.WriteString(fmt.Sprintf("%s", character[cell]))
 		}
 		strBuilder.WriteString(fmt.Sprintln())
 	}
