@@ -22,11 +22,11 @@ func TestCreateBoard(t *testing.T) {
 	const columnsExpected uint = 5
 	const rowsExpected uint = 5
 	boardExpected := Board{
-		{DEAD, DEAD, DEAD, DEAD, DEAD},
-		{DEAD, DEAD, DEAD, DEAD, DEAD},
-		{DEAD, DEAD, DEAD, DEAD, DEAD},
-		{DEAD, DEAD, DEAD, DEAD, DEAD},
-		{DEAD, DEAD, DEAD, DEAD, DEAD},
+		{false, false, false, false, false},
+		{false, false, false, false, false},
+		{false, false, false, false, false},
+		{false, false, false, false, false},
+		{false, false, false, false, false},
 	}
 
 	boardResult := NewEmptyBoardOfSize(rowsExpected, columnsExpected)
@@ -61,11 +61,11 @@ func TestRandomInitializationBoard(t *testing.T) {
 	)
 	seed := int64(1)
 	boardExpected := Board{
-		{ALIVE, ALIVE, ALIVE, DEAD, DEAD},
-		{ALIVE, DEAD, DEAD, DEAD, DEAD},
-		{ALIVE, ALIVE, DEAD, DEAD, DEAD},
-		{DEAD, DEAD, DEAD, ALIVE, DEAD},
-		{DEAD, DEAD, ALIVE, ALIVE, DEAD},
+		{true, true, true, false, false},
+		{true, false, false, false, false},
+		{true, true, false, false, false},
+		{false, false, false, true, false},
+		{false, false, true, true, false},
 	}
 
 	boardResult := NewRandomBoard(rowsExpected, columnsExpected, seed)
@@ -88,8 +88,8 @@ func TestRandomInitializationBoard(t *testing.T) {
 // }
 
 // func TestLowerBoundCornerCell(t *testing.T) {
-// 	position := DEAD
-// 	expectedLowerBound := DEAD
+// 	position := false
+// 	expectedLowerBound := false
 
 // 	result := lowerBound(position)
 
@@ -121,6 +121,3 @@ func TestRandomInitializationBoard(t *testing.T) {
 // 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
 // 	}
 // }
-
-
-
