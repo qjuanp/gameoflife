@@ -19,7 +19,7 @@ func NewEmptyBoardOfSize(rows uint, columns uint) Board {
 }
 
 func NewEmptyBoardAsBigAs(board *Board) Board {
-	return NewEmptyBoardOfSize(board.NumberOfRows(), board.NumberOfColumns())
+	return NewEmptyBoardOfSize(board.CountRows(), board.CountColumns())
 }
 
 func NewRandomBoard(rows uint, columns uint, seed int64) Board {
@@ -58,11 +58,11 @@ func (board *Board) ToString() string {
 	return strBuilder.String()
 }
 
-func (board *Board) NumberOfRows() uint {
+func (board *Board) CountRows() uint {
 	return uint(len(*board))
 }
 
-func (board *Board) NumberOfColumns() uint {
+func (board *Board) CountColumns() uint {
 	return uint(len((*board)[0]))
 }
 
@@ -74,8 +74,16 @@ func (board *Board) LowerBound(index int) int {
 	}
 }
 
-func (board *Board) UpperBound(index int, maxLength uint) int {
-	if index >= int(maxLength-1) {
+func (board *Board) RowsUpperBoundFor(index int) int {
+	return upperBound(index, len(*board))
+}
+
+func (board *Board) ColumnsUpperBoundFor(index int) int {
+	return upperBound(index, len((*board)[0]))
+}
+
+func upperBound(index int, maxLength int) int {
+	if index >= maxLength-1 {
 		return index
 	} else {
 		return index + 1
