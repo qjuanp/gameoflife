@@ -29,7 +29,7 @@ func TestCountAliveNeighborsAllDead(t *testing.T) {
 	}
 
 	game := GameOfLife{currentBoard}
-	result := game.countAliveNeighboards(1, 1)
+	result := game.checkAliveNeighboars(1, 1)
 
 	if result != 0 {
 		t.Error("Miscalculation of alive neighbors when all dead")
@@ -44,7 +44,7 @@ func TestCountAliveNeighbors2AliveFromCenter(t *testing.T) {
 	}
 
 	game := GameOfLife{currentBoard}
-	result := game.countAliveNeighboards(1, 1)
+	result := game.checkAliveNeighboars(1, 1)
 
 	if result != 2 {
 		t.Error("Miscalculation of alive neighbors when all dead")
@@ -58,7 +58,7 @@ func TestCountAliveNeighborsAllAliveFromUpperLeftcorner(t *testing.T) {
 		{DEAD, DEAD, DEAD},
 	}
 	game := GameOfLife{currentBoard}
-	result := game.countAliveNeighboards(1, 1)
+	result := game.checkAliveNeighboars(1, 1)
 
 	if result != 3 {
 		t.Errorf("Miscalculation of alive neighbors when all dead | result=%d", result)
