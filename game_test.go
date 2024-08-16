@@ -9,8 +9,8 @@ import (
 )
 
 func detailedErrorResult(t *testing.T, boardResult board.Board, boardExpected board.Board) {
-	t.Errorf("Board result:\n%s\n", boardResult.ToString())
-	t.Errorf("Board expected:\n%s\n", boardExpected.ToString())
+	t.Errorf("Board result:\n%s\n", boardResult.ToNumbers())
+	t.Errorf("Board expected:\n%s\n", boardExpected.ToNumbers())
 
 	for rowIndex, row := range boardResult {
 		for columnIndex, cell := range row {
@@ -103,9 +103,9 @@ func TestDeadCellsWithExcatly3NeighborsShouldComeAlive(t *testing.T) {
 	}
 
 	expectedNextGenerationBoard := board.Board{
-		{DEAD, ALIVE, ALIVE},
-		{DEAD, ALIVE, ALIVE},
-		{DEAD, DEAD, DEAD},
+		{ALIVE, ALIVE, ALIVE},
+		{ALIVE, ALIVE, ALIVE},
+		{ALIVE, ALIVE, ALIVE},
 	}
 
 	game := GameOfLife{currentBoard}
@@ -126,9 +126,9 @@ func TestDeadCellsWithExcatlyAliveNeighborShouldBeDead(t *testing.T) {
 	}
 
 	expectedNextGenerationBoard := board.Board{
-		{DEAD, ALIVE, DEAD},
-		{DEAD, ALIVE, DEAD},
-		{DEAD, ALIVE, DEAD},
+		{ALIVE, ALIVE, ALIVE},
+		{ALIVE, ALIVE, ALIVE},
+		{ALIVE, ALIVE, ALIVE},
 	}
 
 	game := GameOfLife{currentBoard}
@@ -137,6 +137,38 @@ func TestDeadCellsWithExcatlyAliveNeighborShouldBeDead(t *testing.T) {
 	if !reflect.DeepEqual(nextGenerationGame.Board, expectedNextGenerationBoard) {
 		t.Errorf("Rule error: Dead cells with no neighbors")
 		detailedErrorResult(t, nextGenerationGame.Board, expectedNextGenerationBoard)
+	}
+}
+
+func TestAliveCellsCounterAllDead(t *testing.T) {
+	currentBoard := board.Board{
+		{DEAD, DEAD, DEAD},
+		{DEAD, DEAD, DEAD},
+		{DEAD, DEAD, DEAD},
+	}
+
+	game := GameOfLife{currentBoard}
+
+	aliveCells := game.checkAliveNeighboars(0, 0)
+
+	if aliveCells != 0 {
+		t.Error("Expected `0` alive neighboar cells")
+	}
+}
+
+func TestAliveCellsCounterAllAlive(t *testing.T) {
+	currentBoard := board.Board{
+		{ALIVE, ALIVE, ALIVE},
+		{ALIVE, ALIVE, ALIVE},
+		{ALIVE, ALIVE, DEAD},
+	}
+
+	game := GameOfLife{currentBoard}
+
+	aliveCells := game.checkAliveNeighboars(2, 2)
+
+	if aliveCells != 8 {
+		t.Errorf("Alive cells:%d. Expected `0` alive neighboar cells", aliveCells)
 	}
 }
 

@@ -18,7 +18,7 @@ func (game *GameOfLife) next() GameOfLife {
 
 	for rowIndex, row := range game.Board {
 		for columnIndex, cell := range row {
-			aliveNeighbors := game.countAliveNeighboards(rowIndex, columnIndex)
+			aliveNeighbors := game.checkAliveNeighboars(rowIndex, columnIndex)
 			newBoardState[rowIndex][columnIndex] = newCellState(cell, aliveNeighbors)
 		}
 	}
@@ -26,21 +26,16 @@ func (game *GameOfLife) next() GameOfLife {
 	return GameOfLife{newBoardState}
 }
 
-func (game *GameOfLife) countAliveNeighboards(row int, column int) uint8 {
+func (game *GameOfLife) checkAliveNeighboars(rowIdx int, columnIdx int) uint8 {
 	var aliveNeighbors uint8 = 0
 
-	for r := game.LowerBound(row); r <= game.RowsUpperBoundFor(row); r++ {
-		for c := game.LowerBound(column); c <= game.ColumnsUpperBoundFor(column); c++ {
-			// fmt.Printf("on(%d,%d)=%d", r, c, currentBoard[r][c])
-			// fmt.Println()
-			if (r != row || c != column) && game.Board[r][c] == ALIVE {
-				// fmt.Printf("Counted on(%d,%d)=%d", r, c, currentBoard[r][c])
-				// fmt.Println()
+	for row, hasNextRow, currentRowIndex, itRows := game.Board.IterateNeighborsOfRow(rowIdx); hasNextRow; row, hasNextRow, currentRowIndex = itRows() {
+		for cell, hasNextColumns, currentColumnIndex, itColumns := game.Board.IterateNightborsOf(row, columnIdx); hasNextColumns; cell, hasNextColumns, currentColumnIndex = itColumns() {
+			if (rowIdx != currentRowIndex || columnIdx != currentColumnIndex) && cell == ALIVE {
 				aliveNeighbors++
 			}
 		}
 	}
-
 	return aliveNeighbors
 }
 
