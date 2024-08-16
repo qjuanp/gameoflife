@@ -76,48 +76,364 @@ func TestRandomInitializationBoard(t *testing.T) {
 	}
 }
 
-// func TestLowerBoundCentreCell(t *testing.T) {
-// 	position := 3
-// 	expectedLowerBound := 2
+func TestIterateNeighborsOfRow(t *testing.T) {
+	boardExpected := Board{
+		{false},
+		{true},
+		{false},
+	}
 
-// 	result := lowerBound(position)
+	// first element, which is the prev neighgord
+	val, hasNext, idx, it := boardExpected.IterateNeighborsOfRow(1)
 
-// 	if result != expectedLowerBound {
-// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-// 	}
-// }
+	if val[0] {
+		t.Error("Wrong `val`. Expected `false` in position 0")
+	}
 
-// func TestLowerBoundCornerCell(t *testing.T) {
-// 	position := false
-// 	expectedLowerBound := false
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
 
-// 	result := lowerBound(position)
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
 
-// 	if result != expectedLowerBound {
-// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-// 	}
-// }
+	// second element, which is the row reviewed
+	val, hasNext, idx = it()
 
-// func TestUpperBoundCentreCell(t *testing.T) {
-// 	position := 3
-// 	length := 5
-// 	expectedLowerBound := 4
+	if !val[0] {
+		t.Error("Wrong `val`. Expected `true` in position 1")
+	}
 
-// 	result := upperBound(position, length)
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
 
-// 	if result != expectedLowerBound {
-// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-// 	}
-// }
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
 
-// func TestUpperBoundCornerCell(t *testing.T) {
-// 	position := 4
-// 	length := 5
-// 	expectedLowerBound := 4
+	// third element, which is the next row
+	val, hasNext, idx = it()
 
-// 	result := upperBound(position, length)
+	if val[0] {
+		t.Error("Wrong `val`. Expected `false` in position 2")
+	}
 
-// 	if result != expectedLowerBound {
-// 		t.Errorf("Lower bound mismatch result=%d | expected=%d", result, expectedLowerBound)
-// 	}
-// }
+	if idx != 2 {
+		t.Errorf("Wrong `idx=%d`. Expected position 2", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}
+
+func TestIterateNeighborsOfRowLowerBound(t *testing.T) {
+	boardExpected := Board{
+		{false},
+		{true},
+		{false},
+	}
+
+	// first element, which is the prev neighgord
+	val, hasNext, idx, it := boardExpected.IterateNeighborsOfRow(0)
+
+	if val[0] {
+		t.Error("Wrong `val`. Expected `false` in position 2")
+	}
+
+	if idx != 2 {
+		t.Errorf("Wrong `idx=%d`. Expected position 2", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// second element, which is the row reviewed
+	val, hasNext, idx = it()
+
+	if val[0] {
+		t.Error("Wrong `val`. Expected `true` in position 1")
+	}
+
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// third element, which is the next row
+	val, hasNext, idx = it()
+
+	if !val[0] {
+		t.Error("Wrong `val`. Expected `false` in position 2")
+	}
+
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}
+
+func TestIterateNeighborsOfRowLowerBound100x100(t *testing.T) {
+	boardExpected := NewEmptyBoardOfSize(100, 100)
+
+	row, hasNext, idx, it := boardExpected.IterateNeighborsOfRow(0)
+
+	// first element, which is the prev neighgord
+
+	if len(row) != 100 {
+		t.Error("Wrong `row` length. Expected 100")
+	}
+
+	if idx != 99 {
+		t.Errorf("Wrong `idx=%d`. Expected position 99", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// second element, which is the row reviewed
+	row, hasNext, idx = it()
+
+	if len(row) != 100 {
+		t.Error("Wrong `row` length. Expected 100")
+	}
+
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// third element, which is the next row
+	row, hasNext, idx = it()
+
+	if len(row) != 100 {
+		t.Error("Wrong `row` length. Expected 100")
+	}
+
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}
+
+func TestIterateNeighborsOfRowUpperBound(t *testing.T) {
+	boardExpected := Board{
+		{false},
+		{true},
+		{false},
+	}
+
+	// first element, which is the prev neighgord
+	val, hasNext, idx, it := boardExpected.IterateNeighborsOfRow(2)
+
+	if !val[0] {
+		t.Error("Wrong `val`. Expected `false` in position 1")
+	}
+
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// second element, which is the row reviewed
+	val, hasNext, idx = it()
+
+	if val[0] {
+		t.Error("Wrong `val`. Expected `true` in position 2")
+	}
+
+	if idx != 2 {
+		t.Errorf("Wrong `idx=%d`. Expected position 2", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// third element, which is the next row
+	val, hasNext, idx = it()
+
+	if val[0] {
+		t.Error("Wrong `val`. Expected `false` in position 0")
+	}
+
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}
+
+func TestIterateNeighborsOfColumn(t *testing.T) {
+	boardExpected := Board{
+		{false, true, false},
+	}
+
+	// first element, which is the prev neighgord
+	val, hasNext, idx, it := boardExpected.IterateNightborsOf(boardExpected[0], 1)
+
+	if val {
+		t.Error("Wrong `val`. Expected `false` in position 0")
+	}
+
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// second element, which is the row reviewed
+	val, hasNext, idx = it()
+
+	if !val {
+		t.Error("Wrong `val`. Expected `true` in position 1")
+	}
+
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// third element, which is the next row
+	val, hasNext, idx = it()
+
+	if val {
+		t.Error("Wrong `val`. Expected `false` in position 2")
+	}
+
+	if idx != 2 {
+		t.Errorf("Wrong `idx=%d`. Expected position 2", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}
+
+func TestIterateNeighborsOfColumnsLowerBound(t *testing.T) {
+	boardExpected := Board{
+		{false, true, false},
+	}
+
+	// first element, which is the prev neighgord
+	val, hasNext, idx, it := boardExpected.IterateNightborsOf(boardExpected[0], 0)
+
+	if val {
+		t.Error("Wrong `val`. Expected `false` in position 2")
+	}
+
+	if idx != 2 {
+		t.Errorf("Wrong `idx=%d`. Expected position 2", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// second element, which is the row reviewed
+	val, hasNext, idx = it()
+
+	if val {
+		t.Error("Wrong `val`. Expected `true` in position 1")
+	}
+
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// third element, which is the next row
+	val, hasNext, idx = it()
+
+	if !val {
+		t.Error("Wrong `val`. Expected `false` in position 2")
+	}
+
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}
+
+func TestIterateNeighborsOfColumnsUpperBound(t *testing.T) {
+	boardExpected := Board{
+		{false, true, false},
+	}
+
+	// first element, which is the prev neighgord
+	val, hasNext, idx, it := boardExpected.IterateNightborsOf(boardExpected[0], 2)
+
+	if !val {
+		t.Error("Wrong `val`. Expected `false` in position 1")
+	}
+
+	if idx != 1 {
+		t.Errorf("Wrong `idx=%d`. Expected position 1", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// second element, which is the row reviewed
+	val, hasNext, idx = it()
+
+	if val {
+		t.Error("Wrong `val`. Expected `true` in position 2")
+	}
+
+	if idx != 2 {
+		t.Errorf("Wrong `idx=%d`. Expected position 2", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+
+	// third element, which is the next row
+	val, hasNext, idx = it()
+
+	if val {
+		t.Error("Wrong `val`. Expected `false` in position 0")
+	}
+
+	if idx != 0 {
+		t.Errorf("Wrong `idx=%d`. Expected position 0", idx)
+	}
+
+	if !hasNext {
+		t.Error("Iterator `it` calculated wrong `hasNext`")
+	}
+}

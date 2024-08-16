@@ -12,7 +12,7 @@
 
 Run the game of life directly with go
 
-`go run main.go`
+`go run .`
 
 ## Tests
 
@@ -24,12 +24,12 @@ Execute all the test cases
 
 - [X] run it forever and update results in console
 - [ ] Review pending features from the origianl documentation
-- [ ] refactor
-    - [ ] Modularize the code (Board Functionality != Game of Life Rules) 
+- [X] refactor
+    - [X] Modularize the code (Board Functionality != Game of Life Rules) 
         - Is there a generic implementation to inject the Cell
         - How to restrict the types to be initialized just with specific functions
         - How to package the code?
-- [ ] Board: connect edges so every cell will have 8 neighbors
+- [X] Board: connect edges so every cell will have 8 neighbors
 - [ ] Refactor 2:
     - [ ] Memory Optimization? 
         - Less memory consumption vs Inmutability

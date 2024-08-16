@@ -43,11 +43,21 @@ func NewRandomBoard(rows uint, columns uint, seed int64) Board {
 }
 
 func (board *Board) ToString() string {
-	strBuilder := strings.Builder{}
-	character := map[bool]string{
+	return board.ToStringWith(map[bool]string{
 		true:  "\u2588",
 		false: "\u0020",
-	}
+	})
+}
+
+func (board *Board) ToNumbers() string {
+	return board.ToStringWith(map[bool]string{
+		true:  "1",
+		false: "0",
+	})
+}
+
+func (board *Board) ToStringWith(character map[bool]string) string {
+	strBuilder := strings.Builder{}
 	for _, row := range *board {
 		for _, cell := range row {
 			strBuilder.WriteString(fmt.Sprintf("%s", character[cell]))
@@ -66,26 +76,63 @@ func (board *Board) CountColumns() uint {
 	return uint(len((*board)[0]))
 }
 
-func (board *Board) LowerBound(index int) int {
-	if index == 0 {
-		return 0
+// TODO: Make borderless optional
+func (board *Board) IterateNeighborsOfRow(row int) (val []bool, hasNext bool, idx int, it func() (val []bool, hasNext bool, idx int)) {
+	length := len(*board)
+	var currentIndex int
+	count := 1
+
+	if row == 0 {
+		currentIndex = int(board.CountRows()) - 1
+	} else if row >= length {
+		currentIndex = length - 2
 	} else {
-		return index - 1
+		currentIndex = row - 1
+	}
+	return (*board)[currentIndex], (count <= 3), currentIndex, func() (val []bool, hasNext bool, idx int) {
+		currentIndex++
+		count++
+
+		if currentIndex >= length {
+			currentIndex = 0
+		}
+
+		currentRow := (*board)[currentIndex]
+
+		if len(currentRow) == 0 {
+			println("Here's an error")
+		}
+
+		return (*board)[currentIndex], (count <= 3), currentIndex
+
 	}
 }
 
-func (board *Board) RowsUpperBoundFor(index int) int {
-	return upperBound(index, len(*board))
-}
+func (board *Board) IterateNightborsOf(row []bool, column int) (cell bool, hasNext bool, idx int, it func() (cell bool, hasNext bool, idx int)) {
+	length := len(row)
+	var currentIndex int
+	count := 1
 
-func (board *Board) ColumnsUpperBoundFor(index int) int {
-	return upperBound(index, len((*board)[0]))
-}
-
-func upperBound(index int, maxLength int) int {
-	if index >= maxLength-1 {
-		return index
+	if column == 0 {
+		currentIndex = int(board.CountColumns()) - 1
+	} else if column >= length {
+		currentIndex = length - 2
 	} else {
-		return index + 1
+		currentIndex = column - 1
+	}
+
+	return row[currentIndex], (count <= 3), currentIndex, func() (cell bool, hasNext bool, idx int) {
+		currentIndex++
+		count++
+
+		if currentIndex >= length {
+			currentIndex = 0
+		}
+
+		if length == 0 {
+			println("here's an error")
+		}
+
+		return row[currentIndex], (count <= 3), currentIndex
 	}
 }
